@@ -1,0 +1,13 @@
+.display-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px;
+  background-color: cornflowerblue;
+  height: 40px;
+  max-width: 900px;
+}
+
+.game-reset-button {
+  height: 30px;
+}

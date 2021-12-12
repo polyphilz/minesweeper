@@ -1,23 +1,43 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import _ from "lodash";
 
 import Tile, { TileProps } from "../tile/Tile";
 
 import "./Board.css";
+import { GameState } from "../../state";
 
 interface BoardProps {
+  gameState: GameState;
   height: number;
   width: number;
   numMines: number;
+  flagToggleCallback: (flagPlaced: boolean) => void;
+  gameStateSetterCallback: (gameState: GameState) => void;
 }
 
-const Board: React.FC<BoardProps> = ({ height, width, numMines }) => {
+const Board: React.FC<BoardProps> = ({
+  gameState,
+  height,
+  width,
+  numMines,
+  flagToggleCallback,
+  gameStateSetterCallback,
+}) => {
+  useEffect(() => {
+    if (gameState === GameState.NOT_STARTED) resetGame();
+  }, [gameState]);
+
   const [tilesMatrix, setTilesMatrix] = useState(
     generateTilePropsMatrix(height, width, numMines)
   );
 
+  function resetGame() {
+    setTilesMatrix(generateTilePropsMatrix(height, width, numMines));
+  }
+
   function endGame() {
     console.log("Game over.");
+    gameStateSetterCallback(GameState.LOST);
   }
 
   function generateTilePropsMatrix(
@@ -60,6 +80,11 @@ const Board: React.FC<BoardProps> = ({ height, width, numMines }) => {
   }
 
   function handleLeftClick(x: number, y: number) {
+    // Start the game if it hasn't already been started.
+    if (gameState !== GameState.ACTIVE) {
+      gameStateSetterCallback(GameState.ACTIVE);
+    }
+
     // Ignore click if the tile is already open or has been flagged.
     if (tilesMatrix[x][y].isOpen || tilesMatrix[x][y].isFlagged) return;
 
@@ -294,12 +319,18 @@ const Board: React.FC<BoardProps> = ({ height, width, numMines }) => {
   }
 
   function handleRightClick(x: number, y: number) {
+    // Start the game if it hasn't already been started.
+    if (gameState !== GameState.ACTIVE) {
+      gameStateSetterCallback(GameState.ACTIVE);
+    }
+
     // Ignore right clicks on opened tiles
     if (tilesMatrix[x][y].isOpen) return;
 
     const tilesMatrixCopy = _.cloneDeep(tilesMatrix);
     tilesMatrixCopy[x][y].isFlagged = !tilesMatrix[x][y].isFlagged;
     setTilesMatrix(tilesMatrixCopy);
+    flagToggleCallback(tilesMatrixCopy[x][y].isFlagged);
   }
 
   function randomlyPlaceMines(
