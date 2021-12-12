@@ -1,11 +1,11 @@
 import React from "react";
 
-import Tile from "../tile/Tile";
+import { Tile, TileProps } from "../tile/Tile";
 
 import "./Board.css";
 
-const Board = () => {
-  const tilesMatrix = generateTilePropsMatrix();
+const Board: React.FC = () => {
+  const tilesMatrix: Array<Array<TileProps>> = generateTilePropsMatrix();
   randomlyPlaceMines(tilesMatrix);
   computeAdjacentMines(tilesMatrix);
 
@@ -30,34 +30,35 @@ const Board = () => {
   );
 };
 
-function generateTilePropsMatrix(): Array<Array<any>> {
-  const tilesMatrix = [];
+function generateTilePropsMatrix(): Array<Array<TileProps>> {
+  const tilesMatrix: Array<Array<TileProps>> = [];
   for (let i = 0; i < 5; i++) {
-    const row = [];
+    const row: TileProps[] = [];
     for (let j = 0; j < 5; j++) {
-      row.push({
+      const newTileProps: TileProps = {
         x: i,
         y: j,
         hasMine: false,
         numAdjMines: 0,
-      });
+      };
+      row.push(newTileProps);
     }
     tilesMatrix.push(row);
   }
   return tilesMatrix;
 }
 
-function randomlyPlaceMines(tilesMatrix: Array<Array<any>>) {
-  const placedMineCoordinates = new Set<[number, number]>();
+function randomlyPlaceMines(tilesMatrix: Array<Array<TileProps>>) {
+  const placedMineCoordinates = new Set<string>();
   for (let i = 0; i < 10; i++) {
     let randomX = getRandomInt(5);
     let randomY = getRandomInt(5);
-    while (placedMineCoordinates.has([randomX, randomY])) {
+    while (placedMineCoordinates.has(`${randomX}-${randomY}`)) {
       randomX = getRandomInt(5);
       randomY = getRandomInt(5);
     }
     tilesMatrix[randomX][randomY].hasMine = true;
-    placedMineCoordinates.add([randomX, randomY]);
+    placedMineCoordinates.add(`${randomX}-${randomY}`);
   }
 }
 
@@ -65,7 +66,7 @@ function getRandomInt(max: number) {
   return Math.floor(Math.random() * max);
 }
 
-function computeAdjacentMines(tilesMatrix: Array<Array<any>>) {
+function computeAdjacentMines(tilesMatrix: Array<Array<TileProps>>) {
   for (let i = 0; i < tilesMatrix.length; i++) {
     for (let j = 0; j < tilesMatrix[i].length; j++) {
       if (tilesMatrix[i][j].hasMine) continue;
