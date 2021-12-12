@@ -1,0 +1,5 @@
+.board {
+  display: flex;
+  background-color: slategray;
+  width: 1000px;
+}

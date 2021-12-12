@@ -1,0 +1,10 @@
+.tile {
+  width: 20px;
+  height: 20px;
+  background-color: salmon;
+  margin: 5px;
+}
+
+.mine {
+  background-color: lightblue;
+}

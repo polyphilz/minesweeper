@@ -1,13 +1,15 @@
 import React from "react";
 
+import Board from "./components/board/Board";
+
 import "./App.css";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <p>fiosje</p>
+    <div className="app">
+      <Board />
     </div>
   );
-}
+};
 
 export default App;
