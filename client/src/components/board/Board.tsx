@@ -4,9 +4,18 @@ import { Tile, TileProps } from "../tile/Tile";
 
 import "./Board.css";
 
-const Board: React.FC = () => {
-  const tilesMatrix: Array<Array<TileProps>> = generateTilePropsMatrix();
-  randomlyPlaceMines(tilesMatrix);
+interface BoardProps {
+  height: number;
+  width: number;
+  numMines: number;
+}
+
+const Board: React.FC<BoardProps> = ({ height, width, numMines }) => {
+  const tilesMatrix: Array<Array<TileProps>> = generateTilePropsMatrix(
+    height,
+    width
+  );
+  randomlyPlaceMines(tilesMatrix, height, width, numMines);
   computeAdjacentMines(tilesMatrix);
 
   return (
@@ -30,11 +39,14 @@ const Board: React.FC = () => {
   );
 };
 
-function generateTilePropsMatrix(): Array<Array<TileProps>> {
+function generateTilePropsMatrix(
+  height: number,
+  width: number
+): Array<Array<TileProps>> {
   const tilesMatrix: Array<Array<TileProps>> = [];
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < height; i++) {
     const row: TileProps[] = [];
-    for (let j = 0; j < 5; j++) {
+    for (let j = 0; j < width; j++) {
       const newTileProps: TileProps = {
         x: i,
         y: j,
@@ -48,14 +60,19 @@ function generateTilePropsMatrix(): Array<Array<TileProps>> {
   return tilesMatrix;
 }
 
-function randomlyPlaceMines(tilesMatrix: Array<Array<TileProps>>) {
+function randomlyPlaceMines(
+  tilesMatrix: Array<Array<TileProps>>,
+  height: number,
+  width: number,
+  numMines: number
+) {
   const placedMineCoordinates = new Set<string>();
-  for (let i = 0; i < 10; i++) {
-    let randomX = getRandomInt(5);
-    let randomY = getRandomInt(5);
+  for (let i = 0; i < numMines; i++) {
+    let randomX = getRandomInt(height);
+    let randomY = getRandomInt(width);
     while (placedMineCoordinates.has(`${randomX}-${randomY}`)) {
-      randomX = getRandomInt(5);
-      randomY = getRandomInt(5);
+      randomX = getRandomInt(height);
+      randomY = getRandomInt(width);
     }
     tilesMatrix[randomX][randomY].hasMine = true;
     placedMineCoordinates.add(`${randomX}-${randomY}`);

@@ -1,10 +1,13 @@
 .tile {
   width: 20px;
   height: 20px;
-  background-color: salmon;
+  background-color: lightblue;
   margin: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .mine {
-  background-color: lightblue;
+  background-color: salmon;
 }
