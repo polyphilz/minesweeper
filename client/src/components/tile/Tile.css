@@ -26,6 +26,10 @@
   background-color: salmon;
 }
 
+.highlighted {
+  background-color: lemonchiffon;
+}
+
 .mine-tripped {
   background-color: red;
 }

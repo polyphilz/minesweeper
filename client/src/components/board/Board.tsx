@@ -50,6 +50,7 @@ const Board: React.FC<BoardProps> = ({ height, width, numMines }) => {
           hasMine: false,
           mineTripped: false,
           numAdjMines: 0,
+          isHighlighted: false,
         };
         row.push(newTileProps);
       }
@@ -132,13 +133,167 @@ const Board: React.FC<BoardProps> = ({ height, width, numMines }) => {
     }
   }
 
-  function handleMiddleClick(x: number, y: number) {
-    console.log(`Middle click on tile: ${x}, ${y}`);
+  function handleMiddleDownClick(x: number, y: number) {
+    // Ignore if tile has no adjacent mines.
+    if (tilesMatrix[x][y].numAdjMines === 0) return;
+
+    const tilesMatrixCopy = _.cloneDeep(tilesMatrix);
+    for (const [nbrX, nbrY] of [
+      [x, y],
+      [x - 1, y - 1],
+      [x - 1, y],
+      [x - 1, y + 1],
+      [x, y - 1],
+      [x, y + 1],
+      [x + 1, y - 1],
+      [x + 1, y],
+      [x + 1, y + 1],
+    ]) {
+      if (
+        nbrX >= 0 &&
+        nbrX < tilesMatrixCopy.length &&
+        nbrY >= 0 &&
+        nbrY < tilesMatrixCopy[0].length &&
+        !tilesMatrixCopy[nbrX][nbrY].isOpen &&
+        !tilesMatrixCopy[nbrX][nbrY].isFlagged
+      ) {
+        tilesMatrixCopy[nbrX][nbrY].isHighlighted = true;
+      }
+    }
+    setTilesMatrix(tilesMatrixCopy);
+  }
+
+  function handleMiddleUpClick(x: number, y: number) {
+    const tilesMatrixCopy = _.cloneDeep(tilesMatrix);
+    for (const row of tilesMatrixCopy) {
+      for (const tile of row) {
+        tile.isHighlighted = false;
+      }
+    }
+
+    if (
+      tilesMatrixCopy[x][y].numAdjMines === 0 ||
+      !tilesMatrixCopy[x][y].isOpen
+    ) {
+      setTilesMatrix(tilesMatrixCopy);
+      return;
+    }
+
+    let numAdjPlacedFlags = 0;
+    for (const [nbrX, nbrY] of [
+      [x - 1, y - 1],
+      [x - 1, y],
+      [x - 1, y + 1],
+      [x, y - 1],
+      [x, y + 1],
+      [x + 1, y - 1],
+      [x + 1, y],
+      [x + 1, y + 1],
+    ]) {
+      if (
+        nbrX >= 0 &&
+        nbrX < tilesMatrixCopy.length &&
+        nbrY >= 0 &&
+        nbrY < tilesMatrixCopy[0].length &&
+        !tilesMatrixCopy[nbrX][nbrY].isOpen &&
+        tilesMatrixCopy[nbrX][nbrY].isFlagged
+      ) {
+        numAdjPlacedFlags++;
+      }
+    }
+
+    if (numAdjPlacedFlags !== tilesMatrixCopy[x][y].numAdjMines) {
+      setTilesMatrix(tilesMatrixCopy);
+      return;
+    }
+
+    let gameLost = false;
+    for (const [nbrX, nbrY] of [
+      [x - 1, y - 1],
+      [x - 1, y],
+      [x - 1, y + 1],
+      [x, y - 1],
+      [x, y + 1],
+      [x + 1, y - 1],
+      [x + 1, y],
+      [x + 1, y + 1],
+    ]) {
+      if (
+        nbrX >= 0 &&
+        nbrX < tilesMatrixCopy.length &&
+        nbrY >= 0 &&
+        nbrY < tilesMatrixCopy[0].length
+      ) {
+        // Mistake made; incorrect tile flagged
+        if (
+          tilesMatrixCopy[nbrX][nbrY].isFlagged &&
+          !tilesMatrixCopy[nbrX][nbrY].hasMine
+        ) {
+          gameLost = true;
+          break;
+        }
+      }
+    }
+
+    if (!gameLost) {
+      for (const [nbrX, nbrY] of [
+        [x - 1, y - 1],
+        [x - 1, y],
+        [x - 1, y + 1],
+        [x, y - 1],
+        [x, y + 1],
+        [x + 1, y - 1],
+        [x + 1, y],
+        [x + 1, y + 1],
+      ]) {
+        if (
+          nbrX >= 0 &&
+          nbrX < tilesMatrixCopy.length &&
+          nbrY >= 0 &&
+          nbrY < tilesMatrixCopy[0].length &&
+          !tilesMatrixCopy[nbrX][nbrY].isOpen &&
+          !tilesMatrixCopy[nbrX][nbrY].isFlagged
+        ) {
+          openTiles(nbrX, nbrY, tilesMatrixCopy);
+        }
+      }
+      setTilesMatrix(tilesMatrixCopy);
+    } else {
+      for (const [nbrX, nbrY] of [
+        [x - 1, y - 1],
+        [x - 1, y],
+        [x - 1, y + 1],
+        [x, y - 1],
+        [x, y + 1],
+        [x + 1, y - 1],
+        [x + 1, y],
+        [x + 1, y + 1],
+      ]) {
+        if (
+          nbrX >= 0 &&
+          nbrX < tilesMatrixCopy.length &&
+          nbrY >= 0 &&
+          nbrY < tilesMatrixCopy[0].length &&
+          !tilesMatrixCopy[nbrX][nbrY].isOpen &&
+          !tilesMatrixCopy[nbrX][nbrY].isFlagged &&
+          tilesMatrixCopy[nbrX][nbrY].hasMine
+        ) {
+          tilesMatrixCopy[nbrX][nbrY].mineTripped = true;
+        }
+      }
+      for (const row of tilesMatrixCopy) {
+        for (const tile of row) {
+          tile.isDisabled = true;
+          if (!tile.isFlagged && tile.hasMine) tile.isOpen = true;
+          if (tile.isFlagged && !tile.hasMine) tile.incorrectlyFlagged = true;
+        }
+      }
+      setTilesMatrix(tilesMatrixCopy);
+      endGame();
+    }
   }
 
   function handleRightClick(x: number, y: number) {
-    console.log(`Right click on tile: ${x}, ${y}`);
-
     // Ignore right clicks on opened tiles
     if (tilesMatrix[x][y].isOpen) return;
 
@@ -214,11 +369,15 @@ const Board: React.FC<BoardProps> = ({ height, width, numMines }) => {
                 hasMine={tile.hasMine}
                 mineTripped={tile.mineTripped}
                 numAdjMines={tile.numAdjMines}
+                isHighlighted={tile.isHighlighted}
                 leftClickCallback={(x: number, y: number) =>
                   handleLeftClick(x, y)
                 }
-                middleClickCallback={(x: number, y: number) =>
-                  handleMiddleClick(x, y)
+                middleClickDownCallback={(x: number, y: number) =>
+                  handleMiddleDownClick(x, y)
+                }
+                middleClickUpCallback={(x: number, y: number) =>
+                  handleMiddleUpClick(x, y)
                 }
                 rightClickCallback={(x: number, y: number) =>
                   handleRightClick(x, y)

@@ -12,8 +12,10 @@ export interface TileProps {
   hasMine: boolean;
   mineTripped: boolean;
   numAdjMines: number;
+  isHighlighted: boolean;
   leftClickCallback?: (x: number, y: number) => void;
-  middleClickCallback?: (x: number, y: number) => void;
+  middleClickDownCallback?: (x: number, y: number) => void;
+  middleClickUpCallback?: (x: number, y: number) => void;
   rightClickCallback?: (x: number, y: number) => void;
 }
 
@@ -27,16 +29,25 @@ export const Tile: React.FC<TileProps> = ({
   hasMine,
   mineTripped,
   numAdjMines,
+  isHighlighted,
   leftClickCallback = () => undefined,
-  middleClickCallback = () => undefined,
+  middleClickDownCallback = () => undefined,
+  middleClickUpCallback = () => undefined,
   rightClickCallback = () => undefined,
 }) => {
-  // Handles middle mouse button click
-  function onMiddleClick(event: any) {
-    if (isDisabled) return;
-
+  // Handles mouse down for middle button click
+  function onMiddleClickDown(event: any) {
     if (event.button === 1) {
-      middleClickCallback(x, y);
+      if (isDisabled) return;
+      middleClickDownCallback(x, y);
+    }
+  }
+
+  // Handles mouse up for middle button click
+  function onMiddleClickUp(event: any) {
+    if (event.button === 1) {
+      if (isDisabled) return;
+      middleClickUpCallback(x, y);
     }
   }
 
@@ -55,8 +66,10 @@ export const Tile: React.FC<TileProps> = ({
         leftClickCallback(x, y);
       }}
       onContextMenu={onRightClick.bind(this)}
-      onAuxClick={onMiddleClick.bind(this)}
-      className={getClasses(isOpen, hasMine, mineTripped)}
+      // onAuxClick={onMiddleClick.bind(this)}
+      onMouseDown={onMiddleClickDown.bind(this)}
+      onMouseUp={onMiddleClickUp.bind(this)}
+      className={getClasses(isOpen, hasMine, mineTripped, isHighlighted)}
     >
       {handleTileDisplay(
         isFlagged,
@@ -69,7 +82,12 @@ export const Tile: React.FC<TileProps> = ({
   );
 };
 
-function getClasses(isOpen: boolean, hasMine: boolean, mineTripped: boolean) {
+function getClasses(
+  isOpen: boolean,
+  hasMine: boolean,
+  mineTripped: boolean,
+  isHighlighted: boolean
+) {
   let classNameString = "tile";
   if (isOpen) {
     classNameString += " open";
@@ -77,6 +95,7 @@ function getClasses(isOpen: boolean, hasMine: boolean, mineTripped: boolean) {
   } else {
     classNameString += " closed";
   }
+  if (isHighlighted) classNameString += " highlighted";
   if (mineTripped) classNameString += " mine-tripped";
   return classNameString;
 }
