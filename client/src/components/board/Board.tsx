@@ -25,6 +25,7 @@ const Board: React.FC<BoardProps> = ({
 }) => {
   useEffect(() => {
     if (gameState === GameState.NOT_STARTED) resetGame();
+    // eslint-disable-next-line
   }, [gameState]);
 
   const [tilesMatrix, setTilesMatrix] = useState(
@@ -36,7 +37,6 @@ const Board: React.FC<BoardProps> = ({
   }
 
   function endGame() {
-    console.log("Game over.");
     gameStateSetterCallback(GameState.LOST);
   }
 
