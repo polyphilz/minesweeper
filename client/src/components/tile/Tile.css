@@ -21,7 +21,7 @@
 }
 
 .animate-closed {
-  transition: 0.3s;
+  transition: 0.15s;
 }
 
 .closed:hover {
