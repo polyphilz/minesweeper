@@ -159,8 +159,8 @@ const Board: React.FC<BoardProps> = ({
   }
 
   function handleMiddleDownClick(x: number, y: number) {
-    // Ignore if tile has no adjacent mines.
-    if (tilesMatrix[x][y].numAdjMines === 0) return;
+    // Ignore if tile is open and has no adjacent mines.
+    if (tilesMatrix[x][y].isOpen && tilesMatrix[x][y].numAdjMines === 0) return;
 
     const tilesMatrixCopy = _.cloneDeep(tilesMatrix);
     for (const [nbrX, nbrY] of [
