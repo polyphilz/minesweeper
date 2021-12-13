@@ -19,8 +19,12 @@
   background-color: #16151a;
 }
 
+.animate-closed {
+  transition: 0.3s;
+}
+
 .closed:hover {
-  background-color: #222226;
+  background-color: #3f3134;
 }
 
 .closed:active:hover {
@@ -45,5 +49,5 @@
 }
 
 .mine-tripped {
-  background-color: red;
+  background-color: #821200;
 }

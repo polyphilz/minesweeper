@@ -100,6 +100,7 @@ function getClasses(
     if (hasMine) classNameString += " mine";
   } else {
     classNameString += " closed";
+    if (!isHighlighted) classNameString += " animate-closed";
   }
   if (isFlagged) classNameString += " flag";
   if (isHighlighted) classNameString += " highlighted";

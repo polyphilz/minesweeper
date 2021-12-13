@@ -30,10 +30,11 @@
 .display-panel-box.square {
   cursor: pointer;
   width: 40px;
+  transition: 0.3s;
 }
 
 .display-panel-box.square:hover {
-  background-color: #222226;
+  background-color: #3f3134;
 }
 
 .display-panel-box.square:active:hover {
