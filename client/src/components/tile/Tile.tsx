@@ -19,7 +19,7 @@ export interface TileProps {
   rightClickCallback?: (x: number, y: number) => void;
 }
 
-export const Tile: React.FC<TileProps> = ({
+const TileBase: React.FC<TileProps> = ({
   x,
   y,
   isDisabled,
@@ -86,6 +86,8 @@ export const Tile: React.FC<TileProps> = ({
     </div>
   );
 };
+
+const Tile = React.memo(TileBase);
 
 function getClasses(
   isOpen: boolean,
