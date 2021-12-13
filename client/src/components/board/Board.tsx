@@ -40,6 +40,14 @@ const Board: React.FC<BoardProps> = ({
     gameStateSetterCallback(GameState.LOST);
   }
 
+  function processGameWon(tilesMatrix: Array<Array<TileProps>>) {
+    for (const row of tilesMatrix) {
+      for (const tile of row) {
+        tile.isDisabled = true;
+      }
+    }
+  }
+
   function generateTilePropsMatrix(
     height: number,
     width: number,
@@ -117,13 +125,31 @@ const Board: React.FC<BoardProps> = ({
     if (tilesMatrix[x][y].numAdjMines === 0) {
       const tilesMatrixCopy = _.cloneDeep(tilesMatrix);
       openTiles(x, y, tilesMatrixCopy);
+      const won = gameWon(tilesMatrixCopy);
+      if (won) processGameWon(tilesMatrixCopy);
       setTilesMatrix(tilesMatrixCopy);
+      if (won) gameStateSetterCallback(GameState.WON);
       return;
     }
 
     const tilesMatrixCopy = _.cloneDeep(tilesMatrix);
     tilesMatrixCopy[x][y].isOpen = true;
+    const won = gameWon(tilesMatrixCopy);
+    if (won) processGameWon(tilesMatrixCopy);
     setTilesMatrix(tilesMatrixCopy);
+    if (won) gameStateSetterCallback(GameState.WON);
+  }
+
+  function gameWon(tilesMatrix: Array<Array<TileProps>>) {
+    let numClosedTiles = 0;
+    let numFlaggedTiles = 0;
+    for (const row of tilesMatrix) {
+      for (const tile of row) {
+        if (!tile.isOpen) numClosedTiles++;
+        if (tile.isFlagged) numFlaggedTiles++;
+      }
+    }
+    return numClosedTiles === numFlaggedTiles;
   }
 
   /**
@@ -282,7 +308,10 @@ const Board: React.FC<BoardProps> = ({
           openTiles(nbrX, nbrY, tilesMatrixCopy);
         }
       }
+      const won = gameWon(tilesMatrixCopy);
+      if (won) processGameWon(tilesMatrixCopy);
       setTilesMatrix(tilesMatrixCopy);
+      if (won) gameStateSetterCallback(GameState.WON);
     } else {
       for (const [nbrX, nbrY] of [
         [x - 1, y - 1],
@@ -329,7 +358,10 @@ const Board: React.FC<BoardProps> = ({
 
     const tilesMatrixCopy = _.cloneDeep(tilesMatrix);
     tilesMatrixCopy[x][y].isFlagged = !tilesMatrix[x][y].isFlagged;
+    const won = gameWon(tilesMatrixCopy);
+    if (won) processGameWon(tilesMatrixCopy);
     setTilesMatrix(tilesMatrixCopy);
+    if (won) gameStateSetterCallback(GameState.WON);
     flagToggleCallback(tilesMatrixCopy[x][y].isFlagged);
   }
 

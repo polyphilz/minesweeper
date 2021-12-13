@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 
 import Board from "./components/board/Board";
 import DisplayPanel from "./components/DisplayPanel/DisplayPanel";
+import MessageBox from "./components/MessageBox/MessageBox";
 import { GameState } from "./state";
 
 import "./App.css";
 
 const HEIGHT = 16;
 const WIDTH = 30;
-const NUM_MINES = 99;
+const NUM_MINES = 9;
 
 const App = () => {
   const [numFlagsRemaining, setNumFlagsRemaining] = useState(NUM_MINES);
@@ -22,6 +23,7 @@ const App = () => {
     }
     if (gameState === GameState.ACTIVE) {
       setTimeout(() => {
+        if (elapsedSeconds > 999) return;
         setElapsedSeconds(elapsedSeconds + 1);
       }, 1000);
     }
@@ -53,6 +55,8 @@ const App = () => {
           setGameState(newGameState)
         }
       />
+      <div className="vertical-spacer"></div>
+      <MessageBox elapsedSeconds={elapsedSeconds} gameState={gameState} />
     </div>
   );
 };
