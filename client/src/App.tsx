@@ -9,7 +9,7 @@ import "./App.css";
 
 const HEIGHT = 16;
 const WIDTH = 30;
-const NUM_MINES = 9;
+const NUM_MINES = 99;
 
 const App = () => {
   const [numFlagsRemaining, setNumFlagsRemaining] = useState(NUM_MINES);
