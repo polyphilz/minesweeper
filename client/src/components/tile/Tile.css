@@ -17,6 +17,7 @@
 
 .closed {
   background-color: #16151a;
+  cursor: pointer;
 }
 
 .animate-closed {
