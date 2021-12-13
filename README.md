@@ -2,13 +2,19 @@
 
 ## Todo
 
-[] Create board component
-[] Create tile component
-[] Figure out how to randomize mine placement at start of game
-[] Display for number of flags placed
-[] Display for elapsed seconds
-[] New game button
-[] Actual UI design in Figma
+- [x] Create board component
+- [x] Create tile component
+- [x] Figure out how to randomize mine placement at start of game
+- [x] Display for number of flags placed
+- [x] Display for elapsed seconds
+- [x] New game button
+- [x] Actual UI design in Figma
+- [] Implement leaderboard component
+- [] Implement Twitter authentication
+- [] Implement API
+- [] Host on DigitalOcean?
+- [] Implement legend for button
+- [] Use a truly random API for mine generation
 
 ## Notes
 
