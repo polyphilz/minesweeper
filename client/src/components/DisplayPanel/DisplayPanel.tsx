@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { GameState } from "../../state";
 
 import "./DisplayPanel.css";
@@ -14,18 +14,32 @@ const DisplayPanel: React.FC<DisplayPanelProps> = ({
   elapsedSeconds,
   gameStateSetterCallback,
 }) => {
+  const [restartGameEmoji, setRestartGameEmoji] = useState("🥀");
+
   return (
     <div className="display-panel">
-      <div className="flag-number-display">{numFlagsRemaining}</div>
-      <button
+      <div className="display-panel-box">
+        <span>{numFlagsRemaining}</span>
+      </div>
+      <div
         onClick={() => gameStateSetterCallback(GameState.NOT_STARTED)}
-        className="game-reset-button"
+        onMouseDown={() => setRestartGameEmoji("😈")}
+        onMouseUp={() => setRestartGameEmoji("🥀")}
+        className="display-panel-box square"
       >
-        Restart game
-      </button>
-      <div className="timer">{elapsedSeconds}</div>
+        <span>{restartGameEmoji}</span>
+      </div>
+      <div className="display-panel-box">
+        <span>{createElapsedSecondsString(elapsedSeconds)}</span>
+      </div>
     </div>
   );
 };
+
+function createElapsedSecondsString(elapsedSeconds: number) {
+  if (elapsedSeconds < 10) return `00${elapsedSeconds}`;
+  if (elapsedSeconds < 100) return `0${elapsedSeconds}`;
+  return elapsedSeconds;
+}
 
 export default DisplayPanel;

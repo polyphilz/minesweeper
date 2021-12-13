@@ -36,6 +36,7 @@ const App = () => {
           setGameState(newGameState)
         }
       />
+      <div className="vertical-spacer"></div>
       <Board
         gameState={gameState}
         height={HEIGHT}

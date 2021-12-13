@@ -66,10 +66,15 @@ export const Tile: React.FC<TileProps> = ({
         leftClickCallback(x, y);
       }}
       onContextMenu={onRightClick.bind(this)}
-      // onAuxClick={onMiddleClick.bind(this)}
       onMouseDown={onMiddleClickDown.bind(this)}
       onMouseUp={onMiddleClickUp.bind(this)}
-      className={getClasses(isOpen, hasMine, mineTripped, isHighlighted)}
+      className={getClasses(
+        isOpen,
+        hasMine,
+        mineTripped,
+        isFlagged,
+        isHighlighted
+      )}
     >
       {handleTileDisplay(
         isFlagged,
@@ -86,6 +91,7 @@ function getClasses(
   isOpen: boolean,
   hasMine: boolean,
   mineTripped: boolean,
+  isFlagged: boolean,
   isHighlighted: boolean
 ) {
   let classNameString = "tile";
@@ -95,6 +101,7 @@ function getClasses(
   } else {
     classNameString += " closed";
   }
+  if (isFlagged) classNameString += " flag";
   if (isHighlighted) classNameString += " highlighted";
   if (mineTripped) classNameString += " mine-tripped";
   return classNameString;
@@ -108,7 +115,7 @@ function handleTileDisplay(
   numAdjMines: number
 ) {
   if (isFlagged && !incorrectlyFlagged) return "🏳";
-  if (isFlagged && incorrectlyFlagged) return "🏴";
+  if (isFlagged && incorrectlyFlagged) return "🇦🇱";
   if (isOpen && hasMine) return "💣";
   if (isOpen && !!numAdjMines) return numAdjMines;
   if (isOpen && numAdjMines === 0) return "";

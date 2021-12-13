@@ -1,7 +1,11 @@
-.board {
-  background-color: slategray;
-  padding: 20px;
-  max-width: 900px;
+.board-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+  min-width: 660px;
+  max-width: 660px;
+  background-color: #43414d;
 }
 
 .row {

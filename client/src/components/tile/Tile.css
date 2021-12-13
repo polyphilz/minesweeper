@@ -1,7 +1,8 @@
 .tile {
   width: 20px;
   height: 20px;
-  border: 1px solid black;
+  border: 1px solid #545050;
+  font-size: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -15,19 +16,32 @@
 }
 
 .closed {
-  background-color: pink;
+  background-color: #16151a;
+}
+
+.closed:hover {
+  background-color: #222226;
+}
+
+.closed:active:hover {
+  background-color: #390802;
 }
 
 .open {
-  background-color: lightblue;
+  background-color: #e8e8e8;
 }
 
 .mine {
   background-color: salmon;
+  font-size: 14px;
+}
+
+.flag {
+  font-size: 14px;
 }
 
 .highlighted {
-  background-color: lemonchiffon;
+  background-color: rgb(218, 213, 169);
 }
 
 .mine-tripped {

@@ -385,40 +385,42 @@ const Board: React.FC<BoardProps> = ({
   }
 
   return (
-    <div className="board">
-      {tilesMatrix.map((row, i) => {
-        return (
-          <div key={i} className="row">
-            {row.map((tile, j) => (
-              <Tile
-                x={tile.x}
-                y={tile.y}
-                isDisabled={tile.isDisabled}
-                isOpen={tile.isOpen}
-                isFlagged={tile.isFlagged}
-                incorrectlyFlagged={tile.incorrectlyFlagged}
-                hasMine={tile.hasMine}
-                mineTripped={tile.mineTripped}
-                numAdjMines={tile.numAdjMines}
-                isHighlighted={tile.isHighlighted}
-                leftClickCallback={(x: number, y: number) =>
-                  handleLeftClick(x, y)
-                }
-                middleClickDownCallback={(x: number, y: number) =>
-                  handleMiddleDownClick(x, y)
-                }
-                middleClickUpCallback={(x: number, y: number) =>
-                  handleMiddleUpClick(x, y)
-                }
-                rightClickCallback={(x: number, y: number) =>
-                  handleRightClick(x, y)
-                }
-                key={j}
-              />
-            ))}
-          </div>
-        );
-      })}
+    <div className="board-container">
+      <div className="board">
+        {tilesMatrix.map((row, i) => {
+          return (
+            <div key={i} className="row">
+              {row.map((tile, j) => (
+                <Tile
+                  x={tile.x}
+                  y={tile.y}
+                  isDisabled={tile.isDisabled}
+                  isOpen={tile.isOpen}
+                  isFlagged={tile.isFlagged}
+                  incorrectlyFlagged={tile.incorrectlyFlagged}
+                  hasMine={tile.hasMine}
+                  mineTripped={tile.mineTripped}
+                  numAdjMines={tile.numAdjMines}
+                  isHighlighted={tile.isHighlighted}
+                  leftClickCallback={(x: number, y: number) =>
+                    handleLeftClick(x, y)
+                  }
+                  middleClickDownCallback={(x: number, y: number) =>
+                    handleMiddleDownClick(x, y)
+                  }
+                  middleClickUpCallback={(x: number, y: number) =>
+                    handleMiddleUpClick(x, y)
+                  }
+                  rightClickCallback={(x: number, y: number) =>
+                    handleRightClick(x, y)
+                  }
+                  key={j}
+                />
+              ))}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

@@ -3,9 +3,45 @@
   justify-content: space-between;
   align-items: center;
   padding: 30px;
-  background-color: cornflowerblue;
+  background-color: #43414d;
   height: 40px;
-  max-width: 900px;
+  min-width: 660px;
+  max-width: 660px;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                                supported by Chrome, Edge, Opera and Firefox */
+}
+
+.display-panel-box {
+  background-color: #16151a;
+  color: white;
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  width: 60px;
+}
+
+.display-panel-box.square {
+  cursor: pointer;
+  width: 40px;
+}
+
+.display-panel-box.square:hover {
+  background-color: #222226;
+}
+
+.display-panel-box.square:active:hover {
+  background-color: #390802;
+}
+
+.display-panel-box.square > span {
+  margin-top: 7px;
 }
 
 .game-reset-button {
