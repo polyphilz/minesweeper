@@ -9,6 +9,7 @@
 - [x] Display for elapsed seconds
 - [x] New game button
 - [x] Actual UI design in Figma
+- [] Prevent placing more than X flags
 - [] Implement leaderboard component
 - [] Implement Twitter authentication
 - [] Implement API
